@@ -1,4 +1,4 @@
 package com.company;
 
-public class Animal {
+public abstract class  Animal {
 }
