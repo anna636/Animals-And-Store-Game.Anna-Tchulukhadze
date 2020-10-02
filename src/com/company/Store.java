@@ -4,9 +4,11 @@ import java.util.*;
 public class Store {
 
     Scanner scan=new Scanner(System.in);
-    String input="+";
 
-    //Two lists for availabe type of foods and animals that player can buy
+
+
+    String input="+";
+    //Two lists for available type of foods and animals that player can buy
 
     ArrayList<Food> foodTypes=new ArrayList<Food>(Arrays.asList(new Seed(), new Meat(), new Catfood()));
     ArrayList<Animal> animalTypes=new ArrayList<Animal>(Arrays.asList(new Cat("", "male"), new Tiger("","male"),
@@ -23,7 +25,7 @@ public class Store {
 
 
         System.out.println("What kind of food do you want to buy? Price per kg is:\nSeed - 5$,  Catfood- 3$, Meat - 6$,"+
-                "\nWrite one food at a time or write word end if you don't want to buy more food");
+                "\nWrite one food at a time or write word end  after you bought what you wanted if you don't want to buy more food");
 
         input=scan.nextLine();
 
@@ -49,13 +51,31 @@ public class Store {
 
                 {
 
-                    player.foodForAnimals.add(food);
-                    player.money-= food.getCost();
-                    System.out.println("Bought!");
-                    break;
+                    if(player.foodForAnimals.containsKey(food))
+                    {
+                       int keyValue= player.foodForAnimals.get(food);
+                       keyValue++;
+                       player.foodForAnimals.put(food, keyValue);
+                        System.out.println("Bought 1 kg of "+food.getClass().getSimpleName());
+                    }
+
+
+                    else {
+
+
+                        player.foodForAnimals.put(food, 1);
+                        player.money -= food.getCost();
+                        System.out.println("Bought!");
+
+                    }
+
+
 
 
                 }
+                else{
+
+                 }
 
             }
 
@@ -73,121 +93,71 @@ public class Store {
 
     public void buyAnimal(Player player)
     {
+        System.out.println("What kind of animals do you want to buy?\nHamster - 25$,  Fish - 20$, Cat - 100$, Tiger - 900$, Budgie - 50$ " +
+                "\nWrite one animal at a time or write word end after you bought what you wanted if you don't want to buy more animals");
 
-        System.out.println("What kind of animals do you want to buy?\nHamster - 25$,  Fish - 20$, Cat - 300$, Tiger - 900$, Budgie - 50$ " +
-                "\nWrite one animal at a time or write word end if you don't want to buy more animals");
+       String input =scan.nextLine();
 
-
-        input = scan.nextLine().toLowerCase();
-
-
-            while(!input.equals("end")) {
+        while(!input.equals("end")) {
 
 
-
-                    switch (input) {
-
-                        case "hamster":
+            for(Animal myAnimal:animalTypes)
+            {
 
 
+                if (input.toLowerCase().equals(myAnimal.getClass().getSimpleName().toLowerCase()))
 
-                            if (25 > player.money) {
-                                System.out.println("You don't have enough money!");
+                {
 
-                            } else {
-                                System.out.println("What sex do you want it to be?");
-                                String sex = scan.nextLine();
-                                System.out.println("What name do you want it to have?");
-                                String name = scan.nextLine();
-                                player.money -= 25;
+                    if (player.money<myAnimal.getCost())
 
-                                player.animals.add(new Hamster(name, sex));
-
-                            }
-                            break;
-
-                        case "fish":
-
-                            if (20 > player.money) {
-                                System.out.println("You don't have enough money!");
-
-                            } else {
-                                System.out.println("What sex do you want it to be?");
-                                String sex = scan.nextLine();
-                                System.out.println("What name do you want it to have?");
-                                String name = scan.nextLine();
-                                player.money -= 20;
-
-                                player.animals.add(new Fish(name, sex));
-
-                            }
-                            break;
-
-                        case "cat":
-
-                            if (300 > player.money) {
-                                System.out.println("You don't have enough money!");
-
-                            } else {
-                                System.out.println("What sex do you want it to be?");
-                                String sex = scan.nextLine();
-                                System.out.println("What name do you want it to have?");
-                                String name = scan.nextLine();
-                                player.money -= 300;
-
-                                player.animals.add(new Fish(name, sex));
-
-                            }
-                            break;
-
-                        case "tiger":
-
-                            if (900 > player.money) {
-                                System.out.println("You don't have enough money!");
-
-                            } else {
-                                System.out.println("What sex do you want it to be?");
-                                String sex = scan.nextLine();
-                                System.out.println("What name do you want it to have?");
-                                String name = scan.nextLine();
-                                player.money -= 900;
-
-                                player.animals.add(new Fish(name, sex));
-
-                            }
-                            break;
-
-                        case "budgie":
-
-                            if (50 > player.money) {
-                                System.out.println("You don't have enough money!");
-
-                            } else {
-                                System.out.println("What sex do you want it to be?");
-                                String sex = scan.nextLine();
-                                System.out.println("What name do you want it to have?");
-                                String name = scan.nextLine();
-                                player.money -= 50;
-
-                                player.animals.add(new Fish(name, sex));
-
-                            }
-                            break;
-
-
-                        default:
-                            System.out.println("There is no such animal");
-
+                    {
+                        System.out.println("You don't have enough money!");
 
 
                     }
-                    System.out.println("What another animal do you want to buy?");
-                input = scan.nextLine().toLowerCase();
+
+
+                    else {
+                        System.out.println(myAnimal.getCost());
+                        System.out.println("What will be it's name?");
+                       String name = scan.nextLine();
+                        System.out.println("What will be it's sex? male/female");
+                       String sex = scan.nextLine();
+
+                        player.animals.add(myAnimal);
+                        myAnimal.changeNameAndSex(name, sex);
+                        player.money -= myAnimal.getCost();
+                        System.out.println("Bought!");
+                    }
+
+
+
+
                 }
+
+                else {
+
+
+                    continue;
+
+                }
+
+
+
             }
 
 
 
+            System.out.println("What another animal do you want to buy?");
+            input = scan.nextLine().toLowerCase();
+
+
+
+        }
+
+
+        }
 
 
     }
