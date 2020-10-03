@@ -3,11 +3,14 @@ import java.util.*;
 
 public class Player {
 
+    Random rand=new Random();
+    Scanner scan=new Scanner(System.in);
     String name;
     String lastName;
-    boolean foundAnimal=false;
+    boolean canPairAnimals=false; //Variable to check if 2 animals match each other for reproducing
+    String animalSexToPair="+";   //Variable to remember which class child of 2 animals will be
     String input="+";
-    int money=1100;
+    int money=1000000;
 
 
     //Two array lists for animals and food that player stores
@@ -24,7 +27,7 @@ public class Player {
 
     }
 
-    // writing all resources the the player has: money, animals and food
+    // Writing all resources the the player has: money, animals and food
     public void seeResourcesOfPlayer()
     {
 
@@ -49,7 +52,7 @@ public class Player {
         else {
 
             for (Animal animal : animals.keySet()) {
-                System.out.println(animal.name + " ("+animal.getClass().getSimpleName()+")");
+                System.out.println(animal.name + " ("+animal.getClass().getSimpleName()+" " + animal.animalGender.name().toLowerCase() + ")");
 
             }
         }
@@ -204,13 +207,87 @@ public class Player {
                 else {
                     int randomNumber = (rand.nextInt(3) + 1) * 10;
                     animal.health -= randomNumber;
-                    System.out.println(animal.name + " health decrease with "+randomNumber);
-                 System.out.println("Health is: " + animal.health);
+
                 }
             }
         }
 
 
 
+
+
+//Method to ger random sex(male/female) for animals
+   public String randomSex()
+    {
+        int randomNumber=rand.nextInt(2);
+        if(randomNumber==0)
+        {
+            return "male";
+        }
+        else
+        {
+            return "female";
+        }
     }
+
+
+
+
+    //Check if animals can reproduce
+    public void checkIfAnimalsCanReproduce()
+    {
+        if (animals.size() <= 1)
+        {
+            System.out.println("You don't have enough animals to pair them");
+        }
+        else {
+
+            //Checking if user has first animal
+            System.out.println("Write name of animal you want to pair");
+            String firstAnimalName=scan.nextLine().toLowerCase();
+            for(Animal animal:animals.keySet())
+            {
+                if(animal.name.toLowerCase().equals(firstAnimalName)) {
+                    System.out.println("You have this animal!");
+
+                    //Checking if user has another animal
+                    System.out.println("Write name of another animal you want to pair");
+                    String secondAnimalName = scan.nextLine().toLowerCase();
+
+                    for (Animal anotherAnimal : animals.keySet()) {
+
+
+                        if (anotherAnimal.name.toLowerCase().equals(secondAnimalName))
+                        {
+
+                            //Checking if animals are same species
+                            if(animal.getClass().getSimpleName().equals(anotherAnimal.getClass().getSimpleName()))
+                            {
+                                //Checking if animals have different sexes
+                                if(!animal.animalGender.name().equals(anotherAnimal.animalGender.name()))
+                                {
+                                    this.canPairAnimals=true; //Animals can pair
+
+                                    //Remembering the class of which new animal will be
+                                    animalSexToPair= animal.getClass().getSimpleName().toLowerCase();
+
+                                }
+                            }
+                        }
+                    }
+                }
+
+
+
+            }
+        }
+
+
+    }
+
+
+
+
+
+}
 
