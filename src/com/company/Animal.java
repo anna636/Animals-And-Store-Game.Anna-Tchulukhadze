@@ -1,12 +1,20 @@
 package com.company;
+import java.util.*;
 
 public abstract class  Animal {
 
+    Scanner scan=new Scanner(System.in);
     String name;
-    Food food;
-    int health=100;
+   protected int cost=0;
+   protected double health=1.00;
+   protected Sex animalGender;
+   protected boolean isAlive=true;  //if animal is alive
 
-    enum Sex{
+
+
+    //Enum to set gender
+    enum Sex
+    {
 
         MALE,
         FEMALE
@@ -14,20 +22,29 @@ public abstract class  Animal {
 
 
 
-    public void eat(Food food)
+
+
+    //Constructor for every animal
+    public Animal(String name, String sex)
     {
-        this.food=food;
-        if(health<=90)
-        {
-            health+=10;
-            System.out.println(name + " has eaten " + this.food.getClass().getSimpleName());
-        }
-        else{
-
-
-            return;
-
-        }
-
+        this.name=name;
+        animalGender=Sex.valueOf(sex.toUpperCase());
     }
+
+
+
+
+
+    //return cost of an animal
+    public int getCost()
+    {
+       return this.cost;
+    }
+
+
+
+
+
+
+
 }

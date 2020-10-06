@@ -10,7 +10,8 @@ public class Player {
     boolean canPairAnimals=false; //Variable to check if 2 animals match each other for reproducing
     String animalSexToPair="+";   //Variable to remember which class child of 2 animals will be
     String input="+";
-    int money=1000000;
+    boolean canContinueToPlay=true;
+    int money=300;
 
 
     //Two array lists for animals and food that player stores
@@ -24,6 +25,20 @@ public class Player {
     {
         this.name=name;
         this.lastName=lastName;
+
+
+    }
+
+
+
+    //Checking if player has enough money and animals to continue to play
+    public boolean checkIfPlayerCanContinueToPlay()
+    {
+        if(animals.size()==0 && money<=0)
+        {
+            canContinueToPlay=false;
+        }
+        return canContinueToPlay;
 
     }
 
@@ -52,7 +67,8 @@ public class Player {
         else {
 
             for (Animal animal : animals.keySet()) {
-                System.out.println(animal.name + " ("+animal.getClass().getSimpleName()+" " + animal.animalGender.name().toLowerCase() + ")");
+                System.out.println(animal.name + " ("+animal.getClass().getSimpleName()+" " + animal.animalGender.name().toLowerCase() + "" +
+                        ", health left: "+(int) Math.round(animal.health*100)+"% )");
 
             }
         }
@@ -105,7 +121,7 @@ public class Player {
 
         {
 
-    //check if such animal exists in list of animals
+    //Check if such animal exists in list of animals
 
         for(Animal animal1:animals.keySet())
         {
@@ -139,7 +155,7 @@ public class Player {
                    {
 
 
-                   if(animal1.health==100)
+                   if(animal1.health==1.00)
                    {
 
                    System.out.println("This animal is already full!");
@@ -148,7 +164,7 @@ public class Player {
 
                    else{
 
-                   animal1.health+=10;
+                   animal1.health+=0.10;
 
                    int keyValue= foodForAnimals.get(food);
                    keyValue--;
@@ -186,27 +202,36 @@ public class Player {
 
 
         //Method to decrease every animal's health
-        //Generate random number between 10 and 30 to decrease animal health with
+        //Generate random percent number between 0.10 and 0.30 to decrease animal health with
         public void decreaseAnimalHealth()
         {
-            Random rand=new Random();
 
 
             for(Animal animal:animals.keySet())
             {
 
-             if(animal.health<=0)
+
+                   double randomNumber = 0.10+(0.30-0.10)*rand.nextDouble();
+
+                double roundedRandomNumber = Math.round(randomNumber * 10) / 10.0;
+                animal.health-=roundedRandomNumber;
+               double health= Math.round(animal.health * 10) / 10.0;
+               animal.health=health;
+
+
+
+
+
+
+               //If animal's health is 0 or lower than 0, it dies and gets removed from user's animal list
+
+                if(animal.health<=0)
                 {
                     animal.isAlive=false;
                     animals.remove(animal, animals.get(animal));
                     System.out.println(animal.name + "(" + animal.getClass().getSimpleName()+") has died! :,(");
 
 
-
-                }
-                else {
-                    int randomNumber = (rand.nextInt(3) + 1) * 10;
-                    animal.health -= randomNumber;
 
                 }
             }
@@ -236,6 +261,8 @@ public class Player {
     //Check if animals can reproduce
     public void checkIfAnimalsCanReproduce()
     {
+
+        //If user has only one animal it's not enough for reproducing
         if (animals.size() <= 1)
         {
             System.out.println("You don't have enough animals to pair them");
@@ -247,8 +274,10 @@ public class Player {
             String firstAnimalName=scan.nextLine().toLowerCase();
             for(Animal animal:animals.keySet())
             {
+
                 if(animal.name.toLowerCase().equals(firstAnimalName)) {
                     System.out.println("You have this animal!");
+
 
                     //Checking if user has another animal
                     System.out.println("Write name of another animal you want to pair");
