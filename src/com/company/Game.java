@@ -5,12 +5,14 @@ public class Game {
 
     Random rand=new Random();
     Scanner scan=new Scanner(System.in);
-    int amountOfPlayers;
-    ArrayList<Player> players=new ArrayList<>(amountOfPlayers);
-    Store myStore=new Store();
-
-    int rounds;
     String input;
+    int amountOfPlayers; //Variable for how many users will be playing this game
+    int rounds; //Variable for how many rounds this game will have
+    ArrayList<Player> players=new ArrayList<>(amountOfPlayers); //Arraylist to store all users and their information
+
+    Store myStore=new Store();  //New store to buy food, animals and sell animals
+
+
 
 
 
@@ -18,6 +20,9 @@ public class Game {
     {
         //main();
     }
+
+    //Main game method
+
     public void main()
     {
 
@@ -67,6 +72,7 @@ public class Game {
 
                 }
 
+                System.out.println("Amount of players is "+amountOfPlayers);
                 return;
             }
 
@@ -95,6 +101,7 @@ public class Game {
 
 
     //Asking user for how many rounds they want to have
+    //If input is not between 5 and 30, ask user again
         public void askForAmountOfRounds()
 
         {
@@ -121,11 +128,15 @@ public class Game {
 
 
 
+//Method to place new animals after mating to user's animal list
+//User chooses names for new animals
 
 public void placeNewAnimalsInUserList(Player player)
 {
     switch(player.animalSexToPair)
     {
+
+        //Cats give 2 babies
         case"cat":
             System.out.println("Mating succeeded! You have 2 new cats! Choose name for first one:");
             scan.nextLine();
@@ -138,6 +149,7 @@ public void placeNewAnimalsInUserList(Player player)
 
 
 
+            //Tiger gives one baby
         case "tiger":
             System.out.println("Mating succeeded! You have 1 new tiger! Choose name for it:");
             scan.nextLine();
@@ -146,6 +158,7 @@ public void placeNewAnimalsInUserList(Player player)
             break;
 
 
+            //Hamster gives 1 baby
         case "hamster":
             System.out.println("Mating succeeded! You have 1 new hamster! Choose name for it:");
             scan.nextLine();
@@ -153,6 +166,8 @@ public void placeNewAnimalsInUserList(Player player)
             player.animals.put(new Hamster(hamsterName, player.randomSex()), new Seed());
             break;
 
+
+            //Fish gives 4 babies
         case "fish":
             System.out.println("Mating succeeded! You have 4 new fishes!");
             System.out.println("Choose name for new fish:");
@@ -170,6 +185,8 @@ public void placeNewAnimalsInUserList(Player player)
             }
             break;
 
+
+            //Budgie gives 2 babies
         case "budgie":
             System.out.println("Mating succeeded! You have 2 new budgies! Choose name for first one:");
             scan.nextLine();
@@ -196,14 +213,42 @@ public void placeNewAnimalsInUserList(Player player)
         {
             System.out.print("-".repeat(20)+"Round "+ (i+1) + "-".repeat(20));
             int j=0;
+
+
+
             while(j<amountOfPlayers) {
+
+
+                //Check if the player has money and animals to continue to play
+                //If not, player gets eliminated and amount of players decreases by 1
+                //If everyone gets eliminated, then the game is over and no one wins
+                players.get(j).checkIfPlayerCanContinueToPlay();
+                if(players.get(j).canContinueToPlay==false)
+                {
+                    System.out.println("\n"+players.get(j).name + " has been eliminated because of lack of money and animals!");
+                    players.remove(players.get(j));
+                    amountOfPlayers-=1;
+                    if(amountOfPlayers==0)
+                    {
+                        System.out.println("No one won! So sad :(");
+                        i=31;
+                        break;
+
+                    }
+
+
+
+                }
+
 
                 System.out.println("\nNow is " + players.get(j).name + "'s turn!");
 
-                // writing all the food, animals and money that the player has
 
-                players.get(j).decreaseAnimalHealth();
-                players.get(j).seeResourcesOfPlayer();
+
+
+
+                players.get(j).decreaseAnimalHealth();  //Decreasing player's animal health for every round
+                players.get(j).seeResourcesOfPlayer();  // Writing all the food, animals and money that the player has
 
 
                 System.out.println("\nYou have 5 choices:\n1. Buy animals\n2. Buy food " +
@@ -216,14 +261,12 @@ public void placeNewAnimalsInUserList(Player player)
                     //User buys animals
                     case "1":
 
-
                         myStore.buyAnimal(players.get(j));
                         break;
 
 
                     //User buys food
                     case "2":
-
 
                         myStore.buyFood(players.get(j));
                         break;
@@ -241,6 +284,7 @@ public void placeNewAnimalsInUserList(Player player)
                         break;
 
 
+                        //User tries mating 1 pair of animals
                     case "4":
 
                       players.get(j).checkIfAnimalsCanReproduce();
@@ -264,13 +308,19 @@ public void placeNewAnimalsInUserList(Player player)
 
 
                     case"5":
+
+                        myStore.sellAnimal(players.get(j));
                         break;
 
 
 
+                }
 
 
 
+
+
+                j++; //After one user has done what he wanted, it's time for new user to choose what to do
 
                 }
 
@@ -278,14 +328,76 @@ public void placeNewAnimalsInUserList(Player player)
 
 
 
-                j++;
 
-                }
+            //If this is the last round, check who wins
+            if(i==rounds-1)
+            {
 
+                System.out.println("Game is over! Now let's see who wins");
 
+                seeWhoWins();
+                break;
 
-            i++;
             }
+            i++; //After all users have chosen what to do, new round begins
+
+            }
+
+
+
+        }
+
+
+
+
+
+        //Method to check who wins
+        public void seeWhoWins()
+        {
+
+            int[] userMoneyArray=new int[amountOfPlayers];
+            //Create new array to place all users' money there
+
+
+            //Sell all animals of each user and increase their money
+            for(Player player:players)
+            {
+                for(Animal animal:player.animals.keySet())
+                {
+                    if(player.animals.size()==0)
+                    {
+
+                    }
+                    else {
+
+                        int cost=(int) Math. round(animal.health * animal.getCost());
+                        player.money+=cost;
+                        player.animals.remove(animal, player.animals.get(animal));
+                    }
+
+                }
+
+            }
+
+            //Place all users' money in array and sort array ascending
+            //Print out name and money of the user who gets on the last index of array
+            for(int i=0; i<players.size(); i++)
+            {
+                userMoneyArray[i]=players.get(i).money;
+                System.out.println(userMoneyArray[i]);
+            }
+            Arrays.sort(userMoneyArray);
+            for(Player newPlayer:players)
+            {
+                if(newPlayer.money==userMoneyArray[userMoneyArray.length-1])
+                {
+                    System.out.println(newPlayer.name + " won! Money count: "+userMoneyArray[userMoneyArray.length-1]);
+                    break;
+                }
+            }
+
+
+
 
 
 
