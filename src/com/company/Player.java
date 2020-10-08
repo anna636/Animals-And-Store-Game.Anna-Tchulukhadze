@@ -10,8 +10,11 @@ public class Player {
     boolean canPairAnimals=false; //Variable to check if 2 animals match each other for reproducing
     String animalSexToPair="+";   //Variable to remember which class child of 2 animals will be
     String input="+";
-    boolean canContinueToPlay=true;
-    int money=300;
+    boolean canContinueToPlay=true;  //Variable to see if user needs to be eliminated
+    int money=120;
+    ArrayList<Animal> animalsThatDied=new ArrayList<>();  //List of animals that died to remove them later
+
+
 
 
     //Two array lists for animals and food that player stores
@@ -32,13 +35,13 @@ public class Player {
 
 
     //Checking if player has enough money and animals to continue to play
-    public boolean checkIfPlayerCanContinueToPlay()
+    public void checkIfPlayerCanContinueToPlay()
     {
         if(animals.size()==0 && money<=0)
         {
             canContinueToPlay=false;
         }
-        return canContinueToPlay;
+
 
     }
 
@@ -67,8 +70,15 @@ public class Player {
         else {
 
             for (Animal animal : animals.keySet()) {
-                System.out.println(animal.name + " ("+animal.getClass().getSimpleName()+" " + animal.animalGender.name().toLowerCase() + "" +
-                        ", health left: "+(int) Math.round(animal.health*100)+"% )");
+
+                if(animal.isAlive==false)
+                {
+
+                }
+                else {
+                    System.out.println(animal.name + " (" + animal.getClass().getSimpleName() + " " + animal.animalGender.name().toLowerCase() + "" +
+                            ", health left: " + (int) Math.round(animal.health * 100) + "%, age:" + animal.age + " )");
+                }
 
             }
         }
@@ -160,6 +170,7 @@ public class Player {
 
                    System.out.println("This animal is already full!");
 
+
                    }
 
                    else{
@@ -181,6 +192,7 @@ public class Player {
                     else
                     {
                         System.out.println(animal1.name+" can not eat such kind of food :(");
+                        break;
                     }
 
                   }
@@ -188,12 +200,13 @@ public class Player {
                     else
                     {
                         System.out.println("You don't have such food!");
+                        break;
                     }
                  }
                }
            }
 
-                        System.out.println("Do you want to feed another animal? Write it's name");
+                        System.out.println("Do you want to feed another animal? Write its name");
                         input=scan.nextLine();
 
                       }
@@ -211,29 +224,39 @@ public class Player {
             {
 
 
-                   double randomNumber = 0.10+(0.30-0.10)*rand.nextDouble();
+                    double randomNumber = 0.10 + (0.30 - 0.10) * rand.nextDouble();
 
-                double roundedRandomNumber = Math.round(randomNumber * 10) / 10.0;
-                animal.health-=roundedRandomNumber;
-               double health= Math.round(animal.health * 10) / 10.0;
-               animal.health=health;
+                    double roundedRandomNumber = Math.round(randomNumber * 10) / 10.0;
+                    animal.health -= roundedRandomNumber;
+                    double health = Math.round(animal.health * 10) / 10.0;
+                    animal.health = health;
+
+                    //If animal dies, add it to list of dead animals
+                    if(animal.health<=0)
+                    {
+                        animalsThatDied.add(animal);
+                    }
 
 
 
+            }
+        }
 
 
 
-               //If animal's health is 0 or lower than 0, it dies and gets removed from user's animal list
-
-                if(animal.health<=0)
+        //Increasing animal age by +1
+        public void increaseAnimalAge()
+        {
+            for(Animal animal:animals.keySet())
+            {
+                animal.age++;
+                if(animal.age>=animal.maxAge)
                 {
-                    animal.isAlive=false;
-                    animals.remove(animal, animals.get(animal));
-                    System.out.println(animal.name + "(" + animal.getClass().getSimpleName()+") has died! :,(");
-
-
-
+                    animalsThatDied.add(animal);
+                    System.out.println(animal.name + " ("+animal.getClass().getSimpleName()+") reached maximum age!");
                 }
+
+
             }
         }
 
@@ -241,7 +264,25 @@ public class Player {
 
 
 
-//Method to ger random sex(male/female) for animals
+        //Checking of someone of animals has died and removing it from animal list
+        public void seeIfAnimalDied() {
+
+
+            if(animalsThatDied.size()>0) {
+                animals.keySet().removeAll(animalsThatDied);
+                System.out.println("Animal died! :(");
+                animalsThatDied.clear();
+            }
+
+        }
+
+
+
+
+
+
+
+//Method to get random sex(male/female) for animals
    public String randomSex()
     {
         int randomNumber=rand.nextInt(2);
@@ -299,10 +340,23 @@ public class Player {
 
                                     //Remembering the class of which new animal will be
                                     animalSexToPair= animal.getClass().getSimpleName().toLowerCase();
+                                    break;
 
                                 }
+
+                                else{
+                                    System.out.println("mating is not possible, animals have same sex!");
+                                    break;
+                                }
+                            }
+
+                            else
+                            {
+                                System.out.println("Mating is not possible, these are different species!");
+                                break;
                             }
                         }
+
                     }
                 }
 

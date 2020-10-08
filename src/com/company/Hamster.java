@@ -2,10 +2,26 @@ package com.company;
 
 public class Hamster extends Animal{
 
-    String name;
+
     int cost=25;
-    public Hamster(String name)
+
+
+
+    public Hamster(String name, String sex)
     {
-        this.name=name;
+        super(name, sex, 8);
+
+    }
+
+
+
+
+
+
+
+
+    @Override
+    public int getCost() {
+        return this.cost;
     }
 }

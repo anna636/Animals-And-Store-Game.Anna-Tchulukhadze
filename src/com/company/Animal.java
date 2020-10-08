@@ -5,10 +5,12 @@ public abstract class  Animal {
 
     Scanner scan=new Scanner(System.in);
     String name;
-   protected int cost=0;
+   protected int cost;
    protected double health=1.00;
    protected Sex animalGender;
-   protected boolean isAlive=true;  //if animal is alive
+   protected int age; //How old is an animal
+   protected boolean isAlive=true;  //If animal is alive
+    protected final int maxAge; // Maximum age for animal
 
 
 
@@ -25,10 +27,11 @@ public abstract class  Animal {
 
 
     //Constructor for every animal
-    public Animal(String name, String sex)
+    public Animal(String name, String sex, int maxAge)
     {
         this.name=name;
         animalGender=Sex.valueOf(sex.toUpperCase());
+        this.maxAge=maxAge;
     }
 
 

@@ -18,11 +18,12 @@ public class Game {
 
     public Game()
     {
-        //main();
+        main();
     }
 
-    //Main game method
 
+
+    //Main game method
     public void main()
     {
 
@@ -218,23 +219,50 @@ public void placeNewAnimalsInUserList(Player player)
             while(j<players.size()) {
 
 
-                System.out.println("\nNow is " + players.get(j).name + "'s turn!\n");
+                //Check if the player has money and animals to continue to play
+                //If not, player gets eliminated and amount of players decreases by 1
+                //If only one user is left, he/she wins
+                players.get(j).checkIfPlayerCanContinueToPlay();
+                if(players.get(j).canContinueToPlay==false) {
+
+                    System.out.println("\n" + players.get(j).name + " has been eliminated because of lack of money and animals!");
+                    players.remove(players.get(j));
+                    amountOfPlayers -= 1;
+                    if (j == players.size()) {
+
+                        j = 0;
+
+                    }
+
+
+                    if (amountOfPlayers == 1) {
+                        System.out.println(players.get(0).name + " won! Everyone else has been eliminated");
+                        i = 31;
+                        break;
+
+                    }
+
+
+                }
+
+                
+
+
+                System.out.println("\n\n\n\n~~Now it's "+ players.get(j).name + "'s turn!~~\n");
 
 
 
 
-                players.get(j).seeIfAnimalDied(); //Checking if some animal died and writing it for user
 
+                players.get(j).seeIfAnimalDied(); //Checking if some animal died
 
-                players.get(j).seeResourcesOfPlayer();  // Writing all the food, animals and money that the player has
-
-
+                players.get(j).seeResourcesOfPlayer();  // Writing all the food, animals (that are alive) and money that the player has
 
 
 
 
                 System.out.println("\nYou have 5 choices:\n1. Buy animals\n2. Buy food " +
-                        "\n3. Feed your animals\n4. Try to mate 1 pair of animals\n5. Sell one of several animals to the shop\n If you" +
+                        "\n3. Feed your animals\n4. Try to mate 1 pair of animals\n5. Sell one of several animals to the shop\nIf you" +
                         " have no money and no animals you get eliminated!");
 
                 String choice = scan.next();
@@ -303,36 +331,11 @@ public void placeNewAnimalsInUserList(Player player)
 
 
 
-                //Check if the player has money and animals to continue to play
-                //If not, player gets eliminated and amount of players decreases by 1
-                //If everyone gets eliminated, then the game is over and no one wins
-                players.get(j).checkIfPlayerCanContinueToPlay();
-                if(players.get(j).canContinueToPlay==false)
-                {
-                    System.out.println("\n"+players.get(j).name + " has been eliminated because of lack of money and animals!");
-                    players.remove(players.get(j));
-                    amountOfPlayers-=1;
 
+                players.get(j).increaseAnimalAge(); //Increasing user's animal age for every round
+                players.get(j).decreaseAnimalHealth();  //Decreasing player's animal health for every round
 
-                    if(amountOfPlayers==1)
-                    {
-                        System.out.println(players.get(0).name + " won! Everyone else has been eliminated");
-                        i=31;
-                        break;
-
-                    }
-
-
-
-                }
-                else{
-
-                    players.get(j).decreaseAnimalHealth();  //Decreasing player's animal health for every round
-                    j++; //After one user has done what he wanted, it's time for new user to choose what to do
-                }
-
-
-
+                j++; //After one user has done what he wanted, it's time for new user to choose what to do
 
                 }
 
@@ -373,7 +376,7 @@ public void placeNewAnimalsInUserList(Player player)
                     }
                     else {
 
-                        int cost=(int) Math. round(animal.health * animal.getCost());
+                        int cost=(int) Math. round(animal.health * animal.getCost()) - (animal.age*2);
                         player.money+=cost;
                         player.animals.remove(animal, player.animals.get(animal));
                     }
@@ -391,7 +394,7 @@ public void placeNewAnimalsInUserList(Player player)
                 }
             });
 
-            System.out.println(players.get(0).name + " won! Money count: "+ players.get(0).money+"$");
+            System.out.println("Wow! "+players.get(0).name + " won! Money count: "+ players.get(0).money+"$");
 
 
 
