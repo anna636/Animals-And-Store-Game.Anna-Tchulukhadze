@@ -254,6 +254,7 @@ public void placeNewAnimalsInUserList(Player player)
 
 
 
+                players.get(j).animalBecomeIll();
                 players.get(j).seeIfAnimalDied(); //Checking if some animal died
 
                 players.get(j).seeResourcesOfPlayer();  // Writing all the food, animals (that are alive) and money that the player has
@@ -376,7 +377,7 @@ public void placeNewAnimalsInUserList(Player player)
                     }
                     else {
 
-                        int cost=(int) Math. round(animal.health * animal.getCost()) - (animal.age*2);
+                        int cost=(int) Math.round(animal.health * animal.getCost()) - (animal.age*2);
                         player.money+=cost;
                         player.animals.remove(animal, player.animals.get(animal));
                     }

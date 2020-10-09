@@ -11,7 +11,7 @@ public class Player {
     String animalSexToPair="+";   //Variable to remember which class child of 2 animals will be
     String input="+";
     boolean canContinueToPlay=true;  //Variable to see if user needs to be eliminated
-    int money=120;
+    int money=2000;
     ArrayList<Animal> animalsThatDied=new ArrayList<>();  //List of animals that died to remove them later
 
 
@@ -165,7 +165,7 @@ public class Player {
                    {
 
 
-                   if(animal1.health==1.00)
+                   if(animal1.health>=1.00)
                    {
 
                    System.out.println("This animal is already full!");
@@ -182,6 +182,12 @@ public class Player {
                    foodForAnimals.put(food, keyValue);
 
                    System.out.println(animal1.name + " ate "+foodName + "!");
+                   if(keyValue<=0)
+                   {
+                       System.out.println("you have no more "+food.getClass().getSimpleName().toLowerCase());
+                       foodForAnimals.remove(food, foodForAnimals.get(food));
+
+                   }
 
 
                        }
@@ -255,6 +261,88 @@ public class Player {
                     animalsThatDied.add(animal);
                     System.out.println(animal.name + " ("+animal.getClass().getSimpleName()+") reached maximum age!");
                 }
+
+
+            }
+        }
+
+
+        //Animals become sick with 20% chance
+        public void animalBecomeIll()
+        {
+            boolean animalsAreIll=false;  //Boolean to indicate that someone of animals is sick
+            for(Animal animal:animals.keySet())
+            {
+                int randomNumber=rand.nextInt(5);
+
+                if(randomNumber==1)
+                {
+                    animalsAreIll=true;
+                    animal.isIll=true;
+                    animalsThatDied.add(animal);  //Animal gets added to list of potentially dead animals
+                    System.out.println(animal.name + " is ill! You need to take it to vet!");
+                }
+            }
+
+
+            //If someone of animals is ill ask user if he want to take animal to vet
+            //If yes, ask name of animal he wants to take to vet
+            if(animalsAreIll) {
+                System.out.println("Sick animals are going to die! Do you want to take any animal to vet? yes/no");
+                input = scan.nextLine().toLowerCase();
+                if(input.equals("yes"))
+                {
+                    System.out.println("Choose animal you want to take to vet and write its name (Otherwise write word end to stop curing animals");
+
+                    input=scan.nextLine().toLowerCase();
+
+                    //As long as user does not write "end" check if user has animal with such name and if that animal is ill
+                    while(!input.equals("end"))
+                    {
+                        {
+                            for (Animal animal : animals.keySet()) {
+                                if (input.equals(animal.name.toLowerCase()) && animal.isIll == true) {
+
+                                    System.out.println("Vet cost for this animal is " + animal.vetCost + "$");
+
+                                    //If user does not have anough money, he can not cure animal
+                                    if (money < animal.vetCost) {
+                                        System.out.println("You don't have enough money!");
+
+
+                                    }
+
+                                    //otherwise user pays for vet and animal becomes healthy with 50% chance
+                                    else {
+
+                                        money -= animal.vetCost;
+                                        System.out.println("You successfully paid for vet! Now you have " + money + "$ left");
+                                        int randomNumber = rand.nextInt(2);
+                                        {
+                                            if (randomNumber == 0) {
+                                                System.out.println("But unfortunately, vet could no help the animal\n");
+
+
+                                            }
+                                            else {
+                                                System.out.println("Yay! Animal is ok now :)\n");
+                                                animalsThatDied.remove(animal);
+                                            }
+                                        }
+                                    }
+
+
+                                }
+
+                            }
+                        }
+
+
+                        System.out.println("Do you want to try cure another animal? Write its name:");
+                        input=scan.nextLine().toLowerCase();
+                    }
+                }
+
 
 
             }
