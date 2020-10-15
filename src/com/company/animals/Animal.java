@@ -11,8 +11,7 @@ public abstract class  Animal {
    public int age; //How old is an animal
    public final int maxAge; // Maximum age for animal
    public boolean isAlive=true;  //If animal is alive
-
-    public final int vetCost; //Vet cost for animal
+     public final int vetCost; //Vet cost for animal
     public boolean isIll=false; //If animal is ill
 
 
