@@ -185,7 +185,7 @@ public class Player {
                    keyValue--;
                    foodForAnimals.put(food, keyValue);
 
-                   System.out.println(animal1.name + " gets +10% health increase!");
+                   System.out.println(animal1.name + "'s health is now "+(int) Math.round(animal1.health * 100)+"%");
                    if(keyValue<=0)
                    {
                        System.out.println("you have no more "+food.getClass().getSimpleName().toLowerCase());
