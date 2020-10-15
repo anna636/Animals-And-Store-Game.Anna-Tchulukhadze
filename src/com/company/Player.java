@@ -178,14 +178,14 @@ public class Player {
 
                    else{
 
-                       int amountOfFood=promptInt("How many kg of food you want to give animal?", 1, foodForAnimals.get(food));
-                   animal1.health+=amountOfFood*0.10;
+
+                   animal1.health+=0.10;
 
                    int keyValue= foodForAnimals.get(food);
-                   keyValue-=amountOfFood;
+                   keyValue--;
                    foodForAnimals.put(food, keyValue);
 
-                   System.out.println(animal1.name + " ate "+amountOfFood+"kg of " + foodName+ "!");
+                   System.out.println(animal1.name + " gets +10% health increase!");
                    if(keyValue<=0)
                    {
                        System.out.println("you have no more "+food.getClass().getSimpleName().toLowerCase());
