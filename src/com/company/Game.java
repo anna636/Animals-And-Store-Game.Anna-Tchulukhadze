@@ -1,5 +1,13 @@
 package com.company;
+
+import com.company.animals.*;
+import com.company.food.Catfood;
+import com.company.food.Meat;
+import com.company.food.Seed;
+
 import java.util.*;
+
+import static com.company.dialogs.Dialogs.*;
 
 public class Game {
 
@@ -27,7 +35,7 @@ public class Game {
     public void main()
     {
 
-       askForAmountOfRounds();
+        askForAmountOfRounds();
 
         askForAmountOfPlayers();
 
@@ -52,32 +60,10 @@ public class Game {
     //asking for how many users are going to play this game
 
     public void askForAmountOfPlayers() {
-
-
-
-            System.out.println("How many players will play this game? Max amount of players: 4");
-            while(!"1234".contains(amountOfPlayers+"")) {
-
-                try {
-                    amountOfPlayers = scan.nextInt();
-
-                   if (amountOfPlayers < 1 || amountOfPlayers > 4) {
-                        System.out.println("Please write number only from 1 to 4");
-                    }
-                }
-                //catching error if user input is not an integer
-                catch(Exception e)
-                {
-                    System.out.println("Please write only integer \n"+e);
-
-
-                }
-
-                System.out.println("Amount of players is "+amountOfPlayers);
-                return;
-            }
+        amountOfPlayers=promptInt("How many players will play this game? Max amount of players is 4", 1, 4);
 
     }
+
 
 
     //asking all users for their names and last names
@@ -104,26 +90,8 @@ public class Game {
     //Asking user for how many rounds they want to have
     //If input is not between 5 and 30, ask user again
         public void askForAmountOfRounds()
-
         {
-
-        ArrayList<Integer> amountOfRoundsPossible=new ArrayList<>();
-        for(int i=5; i<31; i++)
-       {
-
-           amountOfRoundsPossible.add(i);
-
-       }
-        System.out.println("How many rounds do you want to play? Minimum: 5 Maximum: 30");
-        while(!amountOfRoundsPossible.contains(rounds))
-        {
-            rounds = scan.nextInt();
-            if (!amountOfRoundsPossible.contains(rounds)) {
-
-                System.out.println("Please write number only between 5 to 30");
-           }
-
-       }
+            rounds=promptInt("How many rounds do you want to play? Choose between 5 to 30", 5, 30);
 
     }
 
@@ -254,8 +222,8 @@ public void placeNewAnimalsInUserList(Player player)
 
 
 
-                players.get(j).animalBecomeIll();
-                players.get(j).seeIfAnimalDied(); //Checking if some animal died
+                players.get(j).animalBecomeIll(); //See if some of animals become ill and if user wants to take them to vet
+                players.get(j).seeIfAnimalDied(); //Checking if some animal died and write that to user
 
                 players.get(j).seeResourcesOfPlayer();  // Writing all the food, animals (that are alive) and money that the player has
 
@@ -284,7 +252,7 @@ public void placeNewAnimalsInUserList(Player player)
                         break;
 
 
-                    //User feeds animals if he has at least 1 animal and at least 1 kf of food
+                    //User feeds animals if he has at least 1 animal and at least 1 kf of any food
                     case "3":
 
                         if (players.get(j).animals.size() == 0 || players.get(j).foodForAnimals.size() == 0) {
@@ -334,7 +302,8 @@ public void placeNewAnimalsInUserList(Player player)
 
 
                 players.get(j).increaseAnimalAge(); //Increasing user's animal age for every round
-                players.get(j).decreaseAnimalHealth();  //Decreasing player's animal health for every round
+                players.get(j).decreaseAnimalHealth();  //Decreasing player's animal health for every round and if animal dies, write that to user
+                                                        //in the beginning of next round
 
                 j++; //After one user has done what he wanted, it's time for new user to choose what to do
 
@@ -345,6 +314,7 @@ public void placeNewAnimalsInUserList(Player player)
             if(i==rounds-1)
             {
 
+                System.out.println("==".repeat(30));
                 System.out.println("Game is over! Now let's see who wins");
 
                 seeWhoWins();

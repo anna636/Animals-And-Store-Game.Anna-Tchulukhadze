@@ -1,5 +1,10 @@
 package com.company;
+import com.company.animals.Animal;
+import com.company.food.Food;
+
 import java.util.*;
+
+import static com.company.dialogs.Dialogs.*;
 
 public class Player {
 
@@ -11,7 +16,7 @@ public class Player {
     String animalSexToPair="+";   //Variable to remember which class child of 2 animals will be
     String input="+";
     boolean canContinueToPlay=true;  //Variable to see if user needs to be eliminated
-    int money=2000;
+    int money=1120;   //Money that user begins with
     ArrayList<Animal> animalsThatDied=new ArrayList<>();  //List of animals that died to remove them later
 
 
@@ -71,7 +76,7 @@ public class Player {
 
             for (Animal animal : animals.keySet()) {
 
-                if(animal.isAlive==false)
+                if(!animal.isAlive)
                 {
 
                 }
@@ -122,10 +127,8 @@ public class Player {
     //As long as user input is not "end" user is asked for name of the animal he wants to feed
     public void feedAnimals()
     {
+        String input=prompt("Type the name of animal you want to feed and type word 'end' if you don't want to feed anymore").toLowerCase();
 
-        Scanner scan=new Scanner(System.in);
-        System.out.println("Type the name of animal you want to feed and type word end if you don't want to feed anymore");
-        String input = scan.nextLine();
 
         while(!input.equals("end"))
 
@@ -144,7 +147,7 @@ public class Player {
     //If such animal exists, ask for what kind of food user wants to feed it
     //And check if user has such kind of food
 
-        System.out.println("What type of food do you want to feed it? Seed/meat/catfood");
+        System.out.println("Every 1 kg of food gives +10% health to your animal. What type of food do you want to feed it? Seed/meat/catfood");
         String foodName = scan.nextLine().toLowerCase();
 
 
@@ -175,13 +178,14 @@ public class Player {
 
                    else{
 
-                   animal1.health+=0.10;
+                       int amountOfFood=promptInt("How many kg of food you want to give animal?", 1, foodForAnimals.get(food));
+                   animal1.health+=amountOfFood*0.10;
 
                    int keyValue= foodForAnimals.get(food);
-                   keyValue--;
+                   keyValue-=amountOfFood;
                    foodForAnimals.put(food, keyValue);
 
-                   System.out.println(animal1.name + " ate "+foodName + "!");
+                   System.out.println(animal1.name + " ate "+amountOfFood+"kg of " + foodName+ "!");
                    if(keyValue<=0)
                    {
                        System.out.println("you have no more "+food.getClass().getSimpleName().toLowerCase());
@@ -198,22 +202,17 @@ public class Player {
                     else
                     {
                         System.out.println(animal1.name+" can not eat such kind of food :(");
-                        break;
+
                     }
 
                   }
 
-                    else
-                    {
-                        System.out.println("You don't have such food!");
-                        break;
-                    }
+
                  }
                }
            }
 
-                        System.out.println("Do you want to feed another animal? Write its name");
-                        input=scan.nextLine();
+                        input=prompt("Do you want to feed another animal? Write its name or write 'end' to stop");
 
                       }
                     }
@@ -280,7 +279,7 @@ public class Player {
                     animalsAreIll=true;
                     animal.isIll=true;
                     animalsThatDied.add(animal);  //Animal gets added to list of potentially dead animals
-                    System.out.println(animal.name + " is ill! You need to take it to vet!");
+                    System.out.println(animal.name + " is ill! You need to take it to vet! ");
                 }
             }
 
@@ -288,24 +287,24 @@ public class Player {
             //If someone of animals is ill ask user if he want to take animal to vet
             //If yes, ask name of animal he wants to take to vet
             if(animalsAreIll) {
-                System.out.println("Sick animals are going to die! Do you want to take any animal to vet? yes/no");
-                input = scan.nextLine().toLowerCase();
+               input=prompt("Sick animals are going to die! Do you want to take any animal to vet? yes/no").toLowerCase();
+
                 if(input.equals("yes"))
                 {
-                    System.out.println("Choose animal you want to take to vet and write its name (Otherwise write word end to stop curing animals");
 
-                    input=scan.nextLine().toLowerCase();
+                    input=prompt("Choose animal you want to take to vet and write its name (Otherwise write word" +
+                            " 'end' to stop curing animals").toLowerCase();
 
                     //As long as user does not write "end" check if user has animal with such name and if that animal is ill
                     while(!input.equals("end"))
                     {
                         {
                             for (Animal animal : animals.keySet()) {
-                                if (input.equals(animal.name.toLowerCase()) && animal.isIll == true) {
+                                if (input.equals(animal.name.toLowerCase()) && animal.isIll) {
 
                                     System.out.println("Vet cost for this animal is " + animal.vetCost + "$");
 
-                                    //If user does not have anough money, he can not cure animal
+                                    //If user does not have enough money, he can not cure animal
                                     if (money < animal.vetCost) {
                                         System.out.println("You don't have enough money!");
 
@@ -327,6 +326,7 @@ public class Player {
                                             else {
                                                 System.out.println("Yay! Animal is ok now :)\n");
                                                 animalsThatDied.remove(animal);
+                                                animal.isIll=false;
                                             }
                                         }
                                     }
@@ -338,8 +338,8 @@ public class Player {
                         }
 
 
-                        System.out.println("Do you want to try cure another animal? Write its name:");
-                        input=scan.nextLine().toLowerCase();
+
+                        input=prompt("Do you want to try to cure another animal? Write its name or write 'end' to stop").toLowerCase();
                     }
                 }
 
@@ -399,8 +399,7 @@ public class Player {
         else {
 
             //Checking if user has first animal
-            System.out.println("Write name of animal you want to pair");
-            String firstAnimalName=scan.nextLine().toLowerCase();
+            String firstAnimalName=prompt("Write name of animal you want to pair").toLowerCase();
             for(Animal animal:animals.keySet())
             {
 
@@ -409,8 +408,8 @@ public class Player {
 
 
                     //Checking if user has another animal
-                    System.out.println("Write name of another animal you want to pair");
-                    String secondAnimalName = scan.nextLine().toLowerCase();
+                    String secondAnimalName =prompt("Write name of another animal you want to pair").toLowerCase();
+
 
                     for (Animal anotherAnimal : animals.keySet()) {
 
@@ -444,21 +443,10 @@ public class Player {
                                 break;
                             }
                         }
-
                     }
                 }
-
-
-
             }
         }
-
-
     }
-
-
-
-
-
 }
 
