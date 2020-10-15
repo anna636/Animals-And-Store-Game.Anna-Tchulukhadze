@@ -1,9 +1,9 @@
-package com.company;
+package com.company.food;
 
 public abstract class Food {
 
 
-    int cost=0;
+   public int cost=0;
     public int getCost()
     {
 

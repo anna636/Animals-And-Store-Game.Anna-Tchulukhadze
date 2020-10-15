@@ -1,11 +1,14 @@
-package com.company;
+package com.company.food;
+
+import com.company.food.Food;
 
 public class Meat extends Food {
 
-    int cost=6;
+
     @Override
     public int getCost() {
 
+        cost=6;
         return this.cost;
     }
 }
