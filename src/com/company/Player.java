@@ -221,6 +221,7 @@ public class Player {
 
         //Method to decrease every animal's health
         //Generate random percent number between 0.10 and 0.30 to decrease animal health with
+        //And write it to user
         public void decreaseAnimalHealth()
         {
 
@@ -235,6 +236,7 @@ public class Player {
                     animal.health -= roundedRandomNumber;
                     double health = Math.round(animal.health * 10) / 10.0;
                     animal.health = health;
+                System.out.println(animal.name+"'s health dropped to "+(int) Math.round(animal.health * 100)+"%!");
 
                     //If animal dies, add it to list of dead animals
                     if(animal.health<=0)
