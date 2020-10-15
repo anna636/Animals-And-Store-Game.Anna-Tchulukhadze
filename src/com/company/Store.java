@@ -44,6 +44,8 @@ public class Store {
      {
 
 
+
+
      if (player.money<food.getCost())
 
      {
@@ -53,19 +55,20 @@ public class Store {
       }
 
 
-      else if (input.toLowerCase().equals(food.getClass().getSimpleName().toLowerCase()) &&player.money>=food.getCost() )
+      else if (input.toLowerCase().equals(food.getClass().getSimpleName().toLowerCase()))
 
       {
 
+          int amountOfFood=promptInt("How many kilograms do you want to buy?", 1, (int)Math.round(player.money/food.getCost()));
 
       if(player.foodForAnimals.containsKey(food))
 
      {
         int keyValue= player.foodForAnimals.get(food);
-        keyValue++;
+        keyValue+=amountOfFood;
         player.foodForAnimals.put(food, keyValue);
-         player.money -= food.getCost();
-         System.out.println("Bought 1 kg of "+food.getClass().getSimpleName());
+         player.money -= food.getCost()*amountOfFood;
+         System.out.println("Bought " +amountOfFood+"kg of "+food.getClass().getSimpleName());
          System.out.println("Money left: "+player.money +"$");
      }
 
@@ -73,9 +76,9 @@ public class Store {
      else {
 
 
-         player.foodForAnimals.put(food, 1);
-         player.money -= food.getCost();
-         System.out.println("Bought 1 kg of "+food.getClass().getSimpleName());
+         player.foodForAnimals.put(food, amountOfFood);
+         player.money -= food.getCost()*amountOfFood;
+         System.out.println("Bought " +amountOfFood+"kg of "+food.getClass().getSimpleName());
           System.out.println("Money left "+player.money+"$");
 
      }

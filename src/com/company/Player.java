@@ -16,7 +16,7 @@ public class Player {
     String animalSexToPair="+";   //Variable to remember which class child of 2 animals will be
     String input="+";
     boolean canContinueToPlay=true;  //Variable to see if user needs to be eliminated
-    int money=1120;   //Money that user begins with
+    int money=1200;   //Money that user begins with
     ArrayList<Animal> animalsThatDied=new ArrayList<>();  //List of animals that died to remove them later
 
 
