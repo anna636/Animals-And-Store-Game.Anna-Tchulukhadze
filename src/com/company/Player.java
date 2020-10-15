@@ -161,8 +161,8 @@ public class Player {
 
 
     //Check if animal can eat this kind of food
-    //If animal's health is already 100% player can not feed it, otherwise animal's healthy gets +10 to health
-    // And food type decreases with 1 kg
+    //If animal's health is already 100% player can not feed it, otherwise animal's healthy gets +10 to health with each 1kg of food
+
 
                    if(animals.get(animal1).getClass().getSimpleName().toLowerCase().equals(foodName))
                    {
