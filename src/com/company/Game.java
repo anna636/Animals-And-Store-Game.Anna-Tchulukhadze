@@ -315,7 +315,7 @@ public void placeNewAnimalsInUserList(Player player)
             {
 
                 System.out.println("==".repeat(30));
-                System.out.println("Game is over! Now let's see who wins");
+                System.out.println("Game is over! Now let's see who wins...\n");
 
                 seeWhoWins();
                 break;
@@ -339,19 +339,16 @@ public void placeNewAnimalsInUserList(Player player)
             //Sell all animals of each user and increase their money
             for(Player player:players)
             {
-                for(Animal animal:player.animals.keySet())
-                {
-                    if(player.animals.size()==0)
-                    {
 
-                    }
-                    else {
+                var keysToDelete = new ArrayList<Animal>();
+                for(var animal: player.animals.keySet()){
 
-                        int cost=(int) Math.round(animal.health * animal.getCost()) - (animal.age*2);
-                        player.money+=cost;
-                        player.animals.remove(animal, player.animals.get(animal));
-                    }
+                    int cost=(int) Math.round(animal.health * animal.getCost()) - (animal.age*2);
+                    player.money+=cost;
+                }
 
+                for(var key : keysToDelete){
+                    player.animals.remove(key);
                 }
 
             }
@@ -365,7 +362,7 @@ public void placeNewAnimalsInUserList(Player player)
                 }
             });
 
-            System.out.println("Wow! "+players.get(0).name + " won! Money count: "+ players.get(0).money+"$");
+            System.out.println("Wow! "+players.get(0).name + " "+ players.get(0).lastName+" won! Money count: "+ players.get(0).money+"$");
 
 
 

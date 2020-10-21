@@ -168,7 +168,7 @@ public class Player {
                    {
 
 
-                   if(animal1.health>=1.00)
+                   if(animal1.health>=0.99)
                    {
 
                    System.out.println("This animal is already full!");
@@ -181,6 +181,7 @@ public class Player {
 
                    animal1.health+=0.10;
 
+                       System.out.println(animal1.health + "%");
                    int keyValue= foodForAnimals.get(food);
                    keyValue--;
                    foodForAnimals.put(food, keyValue);
@@ -234,9 +235,8 @@ public class Player {
 
                     double roundedRandomNumber = Math.round(randomNumber * 10) / 10.0;
                     animal.health -= roundedRandomNumber;
-                    double health = Math.round(animal.health * 10) / 10.0;
-                    animal.health = health;
-                System.out.println(animal.name+"'s health dropped to "+(int) Math.round(animal.health * 100)+"%!");
+                    double myHealth = Math.round(animal.health * 10) / 10.0;
+                    animal.health = myHealth;
 
                     //If animal dies, add it to list of dead animals
                     if(animal.health<=0)
@@ -401,12 +401,12 @@ public class Player {
         else {
 
             //Checking if user has first animal
-            String firstAnimalName=prompt("Write name of animal you want to pair").toLowerCase();
+            String firstAnimalName=prompt("Write name of the first animal you want to pair").toLowerCase();
             for(Animal animal:animals.keySet())
             {
 
                 if(animal.name.toLowerCase().equals(firstAnimalName)) {
-                    System.out.println("You have this animal!");
+
 
 
                     //Checking if user has another animal
@@ -445,6 +445,7 @@ public class Player {
                                 break;
                             }
                         }
+
                     }
                 }
             }

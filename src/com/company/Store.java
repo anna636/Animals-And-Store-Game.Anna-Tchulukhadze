@@ -173,23 +173,31 @@ public class Store {
            input=prompt("Write name of animal you want to sell or write word 'end' if you don't want to sell animals").toLowerCase();
             while(!input.toLowerCase().equals("end"))
             {
-                for(Animal animal:newPlayer.animals.keySet())
-                {
-                    if(animal.name.toLowerCase().equals(input))
-                    {
+                var keysToDelete = new ArrayList<Animal>();
+                for(var key: newPlayer.animals.keySet()){
 
-                        int cost=(int) Math. round(animal.health * animal.getCost()) - (animal.age*2);
-                        System.out.println("You get "+cost +"$ from selling");
-                        newPlayer.animals.remove(animal, newPlayer.animals.get(animal));
-                        newPlayer.money+=cost;
+                    if(key.name.toLowerCase().equals(input)){
+
+                        keysToDelete.add(key);
                     }
                 }
 
+                for(var animal : keysToDelete){
+                    int cost=(int) Math. round(animal.health * animal.getCost()) - (animal.age*2);
+                    System.out.println("You get "+cost +"$ from selling");
+                    newPlayer.money+=cost;
+                    newPlayer.animals.remove(animal);
+
+                }
+
+
                 input=prompt("Do you want to sell another animal? Write its name or type 'end' to stop").toLowerCase();
+                }
+
 
             }
         }
-    }
+
 
 
 
