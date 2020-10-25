@@ -181,7 +181,7 @@ public class Player {
 
                    animal1.health+=0.10;
 
-                       System.out.println(animal1.health + "%");
+
                    int keyValue= foodForAnimals.get(food);
                    keyValue--;
                    foodForAnimals.put(food, keyValue);
